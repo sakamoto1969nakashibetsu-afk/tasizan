@@ -9,10 +9,10 @@
 :root { --ink:#27375d; --muted:#687a96; --primary:#346ce1; --green:#18835f; --line:#dce5f6; }
 * { box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; }
-body { margin:0; min-height:100vh; background:linear-gradient(145deg,#e7f4ff,#f9f7ff 55%,#fff2e6); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; }
+body { margin:0; min-height:100vh; min-height:100dvh; background:linear-gradient(145deg,#e7f4ff,#f9f7ff 55%,#fff2e6); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; }
 button,input { font:inherit; } button { cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent; } button:focus-visible { outline:3px solid #ffaf51;outline-offset:3px; } button:disabled { opacity:.5;cursor:not-allowed; }
 .hidden { display:none!important; }
-.app { width:min(100%,780px);margin:auto;padding:10px 14px 14px; }
+.app { width:min(100%,780px);margin:auto;padding:10px max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left)); }
 .brand { display:flex;gap:10px;justify-content:center;align-items:center;margin:2px auto 10px; }
 .brand-mark { display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#ffdc8c;color:#8b5313;font-size:29px;font-weight:900;transform:rotate(-7deg); }
 h1 { margin:0;font-size:clamp(23px,4vw,29px);letter-spacing:.02em;line-height:1.2; }
@@ -31,7 +31,9 @@ h2 { font-size:clamp(22px,4vw,30px);margin:15px 0 9px; }
 .btn { border:0;border-radius:15px;padding:12px 23px;min-height:52px;font-weight:850;font-size:20px; }
 .btn-primary { background:#3979eb;color:#fff;box-shadow:0 4px 0 #2457b3; }.btn-green { background:#188f66;color:#fff;box-shadow:0 4px 0 #116647; }.btn-soft { background:#eaf0fd;color:#385783; }.btn-wide { width:min(100%,410px); }.btn-mini { padding:9px 16px;min-height:40px;font-size:15px; }
 .stats-switch { margin-top:19px; }.stat-panel { border-top:1px solid var(--line);margin-top:15px;padding-top:13px; }
-/* 1問画面 */
+/* 1問画面：縦向きは上下に配置 */
+.play-layout { display:block; }
+.play-question, .play-controls { min-width:0; }
 #play { padding:12px 18px 8px; }
 .page-head { display:flex;justify-content:space-between;align-items:center;font-size:17px;font-weight:850;margin-bottom:6px; }
 .mode { background:#ecf3ff;border-radius:9px;padding:6px 10px;color:#5d76a4;font-size:13px; }
@@ -68,10 +70,94 @@ h2 { font-size:clamp(22px,4vw,30px);margin:15px 0 9px; }
 .btn-danger { border:1px solid #f0c6cc;border-radius:10px;background:white;color:#b24d63;font-size:13px;padding:8px; }
 .history-note,.empty-stats { font-size:14px;color:#677995; }.stats-list { width:100%;border-collapse:collapse;font-size:14px;text-align:left; }.stats-list td,.stats-list th { padding:9px 4px;border-bottom:1px solid var(--line); }
 footer { font-size:12px;color:#8a9bb4;text-align:center;margin-top:10px; }
-@media (max-width:540px) { .app { padding:8px 9px; } .panel { padding:17px 12px; } #play { padding:10px 10px 6px; }.brand { margin-bottom:8px; }.brand-mark { width:35px;height:35px;font-size:23px; } h1 { font-size:22px; }.keypad { gap:6px; }.key { min-height:58px;border-radius:10px; }.answer-box { min-height:60px; }.question { font-size:clamp(42px,9vw,66px); }.edit-keys { gap:6px; }.switch-row { padding:12px; } }
-/* iPadを横向きにしたときも下のボタンを画面内に出す */
-@media (min-width:600px) and (max-height:760px) { .app { padding:5px 10px 6px; }.brand { margin:1px auto 5px; }.brand-mark { width:31px;height:31px;font-size:22px; }h1 { font-size:23px; }.brand small { display:none; }#play { padding:8px 14px 5px; }.page-head { margin-bottom:4px;font-size:15px; }.progress { margin-bottom:5px; }.pip { height:7px; }.question-panel { padding:3px 6px; }.question { font-size:52px; }.answer-label { margin:4px 0 2px;font-size:14px; }.answer-box { min-height:52px; }.answer-value { font-size:39px; }.keypad { margin-top:6px;gap:6px; }.key { min-height:51px;font-size:29px; }.edit-keys { margin-top:6px; }.edit-keys button { min-height:37px; }.actions { margin-top:7px; }.actions .btn { min-height:47px; }.feedback { padding:8px;margin-top:7px; }.feedback strong { font-size:22px; }.feedback .detail { margin:3px 0 7px; }.footer-action { margin:2px 0 0; }body.in-play footer { display:none; } }
-@media (max-height:600px) { .brand small { display:none; } .brand { margin-bottom:3px; }.key { min-height:44px; }.actions .btn { min-height:44px; }.question { font-size:46px; }.answer-box { min-height:46px; }.answer-value { font-size:34px; }#play { padding-top:6px; }.notice { min-height:12px; }.edit-keys button { min-height:34px; } }
+/* 小さな画面でも数字ボタンが押しやすい大きさを維持 */
+@media (max-width:540px) {
+ .app { padding:8px 9px max(8px,env(safe-area-inset-bottom)); }
+ .panel { padding:17px 12px; }
+ #play { padding:10px 10px 6px; }
+ .brand { margin-bottom:8px; }
+ .brand-mark { width:35px;height:35px;font-size:23px; }
+ h1 { font-size:22px; }
+ .keypad { gap:6px; }
+ .key { min-height:58px;border-radius:10px; }
+ .answer-box { min-height:60px; }
+ .question { font-size:clamp(42px,9vw,66px); }
+ .edit-keys { gap:6px; }
+ .switch-row { padding:12px; }
+}
+/* 横向きになったら、計算と数字ボタンを自動的に左右へ配置。
+   iPadのSplit Viewでは実際に使える画面幅を優先。 */
+@media (orientation:landscape) and (min-width:700px) {
+ .app { width:min(100%,1200px); padding:6px max(12px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)); }
+ .brand { margin:0 auto 5px;gap:8px; }
+ .brand-mark { width:34px;height:34px;font-size:23px;border-radius:10px; }
+ h1 { font-size:23px; }
+ .brand small { font-size:11px; }
+ #play { padding:12px 18px 8px; }
+ .page-head { margin-bottom:5px;font-size:16px; }
+ .progress { margin-bottom:9px; }
+ .pip { height:9px; }
+ .play-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.07fr); gap:clamp(14px,3vw,32px); align-items:center; }
+ .play-question { display:flex; flex-direction:column; align-items:stretch; justify-content:center; min-height:275px; }
+ .question-panel { padding:20px 3px; }
+ .question { font-size:clamp(43px,5.5vw,73px); line-height:1.16;letter-spacing:0; }
+ .answer-label { margin:17px 0 7px;font-size:18px; }
+ .answer-box { min-height:82px;max-width:360px;width:100%; }
+ .answer-value { font-size:52px; }
+ .keypad { max-width:none;margin:0;gap:clamp(6px,1vw,12px); }
+ .key { min-height:clamp(62px,10dvh,90px);font-size:clamp(28px,3.5vw,42px); }
+ .edit-keys { max-width:none;margin:11px 0 0; }
+ .edit-keys button { min-height:46px; }
+ .notice { margin:5px 0 0; }
+ .actions { margin-top:8px; }
+ .actions .btn { width:100%;min-height:58px; }
+ .feedback { max-width:none;margin:0;padding:16px 12px; }
+ .feedback .btn { width:100%; }
+ .footer-action { margin-top:2px; }
+ body.in-play footer { display:none; }
+ #home,#result { max-width:780px;margin-left:auto;margin-right:auto; }
+}
+/* 高さが少ない横画面では縦の余白を縮め、スクロールを最小限に */
+@media (orientation:landscape) and (min-width:700px) and (max-height:680px) {
+ .app { padding-top:4px; }
+ .brand { margin-bottom:3px; }
+ .brand small { display:none; }
+ #play { padding:7px 13px 5px; }
+ .page-head { margin-bottom:3px;font-size:14px; }
+ .mode { padding:4px 8px;font-size:12px; }
+ .progress { margin-bottom:5px; }
+ .pip { height:7px; }
+ .play-question { min-height:220px; }
+ .question-panel { padding:9px 3px; }
+ .question { font-size:clamp(40px,4.9vw,60px); }
+ .answer-label { margin:9px 0 4px;font-size:16px; }
+ .answer-box { min-height:64px; }
+ .answer-value { font-size:44px; }
+ .key { min-height:clamp(50px,11dvh,73px); }
+ .edit-keys { margin-top:7px; }
+ .edit-keys button { min-height:38px;font-size:14px; }
+ .actions { margin-top:4px; }
+ .actions .btn { min-height:47px;font-size:18px; }
+ .notice { min-height:15px; margin:2px 0 0;font-size:12px; }
+ .feedback { padding:10px; }
+ .feedback strong { font-size:24px; }
+ .feedback .detail { margin:7px 0 10px; }
+ .footer-action { margin-top:0; }
+}
+/* スマートフォンの横向きなど、低い画面への対応 */
+@media (orientation:landscape) and (max-width:699px) {
+ .app { padding-top:3px; }
+ .brand { margin-bottom:4px; }
+ .brand small { display:none; }
+ #play { padding-top:6px; }
+ .question { font-size:clamp(38px,6vw,52px); }
+ .answer-box { min-height:44px; }
+ .answer-value { font-size:34px; }
+ .key { min-height:43px; }
+ .edit-keys button { min-height:34px; }
+ .actions .btn { min-height:44px; }
+ body.in-play footer { display:none; }
+}
 @media (prefers-reduced-motion:reduce) { *,*:before { transition:none!important; } }
 </style>
 </head>
@@ -90,11 +176,17 @@ footer { font-size:12px;color:#8a9bb4;text-align:center;margin-top:10px; }
  <div id="home-stats" class="stat-panel hidden"></div>
 </section>
 <section id="play" class="panel hidden" aria-label="たしざんの問題">
- <div class="page-head"><span><span id="question-number">1</span> / 10もん</span><span id="mode-indicator" class="mode"></span></div>
- <div id="progress" class="progress" aria-label="10問の進み具合"></div>
- <div class="question-panel"><div class="question" aria-live="polite"><span id="left-number"></span><span class="plus"> ＋ </span><span id="right-number"></span><span class="equals"> ＝ </span><span class="mark">？</span></div></div>
- <div class="answer-label">こたえ</div>
- <div class="answer-box" aria-label="選んだ答え"><span id="answer-display" class="answer-value empty" aria-live="polite">？</span><span class="answer-suffix" aria-hidden="true"></span></div>
+ <div class="play-top">
+  <div class="page-head"><span><span id="question-number">1</span> / 10もん</span><span id="mode-indicator" class="mode"></span></div>
+  <div id="progress" class="progress" aria-label="10問の進み具合"></div>
+ </div>
+ <div class="play-layout">
+ <div class="play-question">
+  <div class="question-panel"><div class="question" aria-live="polite"><span id="left-number"></span><span class="plus"> ＋ </span><span id="right-number"></span><span class="equals"> ＝ </span><span class="mark">？</span></div></div>
+  <div class="answer-label">こたえ</div>
+  <div class="answer-box" aria-label="選んだ答え"><span id="answer-display" class="answer-value empty" aria-live="polite">？</span><span class="answer-suffix" aria-hidden="true"></span></div>
+ </div>
+ <div class="play-controls">
  <div id="entry-controls">
   <div id="keypad" class="keypad" role="group" aria-label="数字を選ぶボタン">
    <button class="key" type="button" data-digit="0">0</button><button class="key" type="button" data-digit="1">1</button><button class="key" type="button" data-digit="2">2</button><button class="key" type="button" data-digit="3">3</button><button class="key" type="button" data-digit="4">4</button>
@@ -105,6 +197,8 @@ footer { font-size:12px;color:#8a9bb4;text-align:center;margin-top:10px; }
   <div class="actions"><button id="final-btn" class="btn btn-green btn-wide" type="button">ファイナルアンサー！</button></div>
  </div>
  <div id="feedback" class="feedback hidden" role="status" aria-live="polite"><strong id="feedback-title"></strong><div id="feedback-detail" class="detail"></div><button id="next-btn" class="btn btn-primary btn-wide" type="button">つぎの もんだい →</button></div>
+ </div>
+ </div>
  <div class="footer-action"><button id="giveup-btn" class="link-button" type="button">とちゅうで おわる</button></div>
 </section>
 <section id="result" class="panel hidden center" aria-label="チャレンジの結果">
